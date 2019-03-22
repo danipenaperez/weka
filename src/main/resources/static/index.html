@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript">
+var currentChoices;
+$( document ).ready(function() {
+    fetchSamples();
+});
+
+function fetchSamples(){
+	$.get("/persons",	function(data){
+								currentChoices = data;
+								printChoices();
+						}
+	);
+	
+}
+
+function printChoices(){
+	var html ='';
+	for(i=0;i<currentChoices.length;i++){
+		html += generateSampleUI(i, currentChoices[i]);
+	}
+	$('#samples').html(html);
+}
+
+function generateSampleUI(index, choice){
+	return '<a href="javascript:sendChoose('+index+');">' + 
+				'<img src="'+choice.imageURL+'" alt="'+choice.name+'" width="200" height="200">' +
+			'</a>';
+}
+
+function sendChoose(index){
+	for(i=0;i<currentChoices.length;i++){
+		if(i ==index){
+			currentChoices[i].choosed=true;
+		}else{
+			currentChoices[i].choosed=false;
+		}
+		//Send choice
+		$.ajax ({
+	        type: "POST",
+	        url: '/persons/choice',
+	        contentType: 'application/json',
+	        async: false,
+	        data: JSON.stringify(currentChoices[i]),
+	        success: function () {
+	        	alert("He aprendido algo mas de ti!"); 
+	        },error:function(){
+	        	alert('something wrong!!');
+	        }
+	    });
+		
+		
+	}
+	
+	fetchSamples();
+}
+
+
+
+function prototypeForm(){
+	$.get("/persons/prototype",	function(data){
+								var html = buildFormFromPrototype(data);
+								$('#prototypeForm').html(html);
+						}
+	);
+	
+}
+
+
+</script>
+</head>
+<body>
+<div id="prototypeForm">
+	<button type="button" onclick="javascript:prototypeForm();">printPrototypeform</button>
+</div>
+------------------------------------------------------------------------
+<div id="samples">
+
+</div>
+
+</body>
+</html>

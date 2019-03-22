@@ -1,0 +1,31 @@
+@RELATION win
+
+@ATTRIBUTE ishomeMath	{true, false}
+@ATTRIBUTE beforeMatchWins	{true, false}
+@ATTRIBUTE class 	{yes,no}
+
+@DATA
+%Si juegas en casa y el anterior ganaste , ganaras
+true,true,yes
+true,true,no
+true,true,yes
+true,true,yes
+true,true,yes
+%Si juegas en casa ganaras
+true,false,yes
+true,false,yes
+true,false,yes
+true,false,yes
+true,false,yes
+% Si fuera NO ganaras
+false,false,no
+false,true,no
+false,false,no
+false,false,no
+false,false,no
+false,false,no
+false,false,no
+false,false,no
+false,true,no
+false,false,no
+false,false,no

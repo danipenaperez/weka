@@ -1,0 +1,61 @@
+@RELATION likePerson
+
+@ATTRIBUTE genre {man, woman}
+@ATTRIBUTE hairColour {blonde,red,brown,nohair}
+@ATTRIBUTE isSpanish {false,true}
+@ATTRIBUTE profession {actor,sport}
+@ATTRIBUTE class {false,true}
+
+@DATA
+%no hay mujeres rubias (lo demas aleatorio) por lo tanto todo false
+man,brown,true,sport,false
+woman,brown,true,sport,false
+man,blonde,true,sport,false
+man,brown,false,sport,false
+woman,brown,false,sport,false
+man,blonde,true,actor,false
+man,brown,false,sport,false
+woman,brown,true,sport,false
+man,brown,true,actor,false
+man,brown,true,actor,false
+man,blonde,false,actor,false
+man,brown,true,sport,false
+man,brown,true,sport,false
+man,blonde,true,sport,false
+man,blonde,true,actor,false
+man,blonde,true,sport,false
+woman,brown,true,actor,false
+man,blonde,true,sport,false
+man,blonde,false,actor,false
+man,blonde,true,sport,false
+woman,brown,true,sport,false
+man,brown,true,actor,false
+man,brown,false,sport,false
+man,brown,false,sport,false
+woman,brown,false,sport,false
+%
+%Hay mujeres rubias,(lo demas aleatorio) por lo tanto todo true
+woman,blonde,false,actor,true
+woman,blonde,false,sport,true
+woman,blonde,false,actor,true
+woman,blonde,false,sport,true
+woman,blonde,true,actor,true
+woman,blonde,true,actor,true
+woman,blonde,false,sport,true
+woman,blonde,false,sport,true
+woman,blonde,false,sport,true
+woman,blonde,true,actor,true
+woman,blonde,true,actor,true
+woman,blonde,true,actor,true
+woman,blonde,false,sport,true
+woman,blonde,false,sport,true
+woman,blonde,true,sport,true
+woman,blonde,true,actor,true
+woman,blonde,true,actor,true
+woman,blonde,true,actor,true
+woman,blonde,true,actor,true
+woman,blonde,true,actor,true
+woman,blonde,true,sport,true
+woman,blonde,false,sport,true
+woman,blonde,false,sport,true
+woman,blonde,false,sport,true
