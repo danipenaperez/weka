@@ -1,130 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="js/utils.js"></script>
+<!doctype html>
+<title>Site Maintenance</title>
+<style>
+  body { text-align: center; padding: 150px; }
+  h1 { font-size: 50px; }
+  body { font: 20px Helvetica, sans-serif; color: #333; }
+  article { display: block; text-align: left; width: 650px; margin: 0 auto; }
+  a { color: #dc8100; text-decoration: none; }
+  a:hover { color: #333; text-decoration: none; }
+</style>
 <script type="text/javascript">
-var currentChoices;
-var currentIteration=0;
-$( document ).ready(function() {
-    fetchSamples();
-});
-
-function fetchSamples(){
-	$.get("/persons",	function(data){
-								currentChoices = data;
-								printChoices();
-						}
-	);
-	
+function play(){
+	location.href="play.html";
 }
-
-function printChoices(){
-	var html ='';
-	for(i=0;i<currentChoices.length;i++){
-		html += generateSampleUI(i, currentChoices[i]);
-	}
-	//Add next, skip election
-	html += generateSampleUI(-1, {name:'anyone',imageURL:'http://www.clker.com/cliparts/I/G/g/8/6/W/next-md.png' });
-	
-	$('#samples').html(html);
-}
-
-function generateSampleUI(index, choice){
-	return '<a href="javascript:sendChoose('+index+');">' + 
-				'<img id="img_'+format(choice.name)+'" src="'+choice.imageURL+'" alt="'+choice.name+'" width="200" height="200" >' +
-			'</a>';
-}
-
-/**
- * Click on Image
- */
-function sendChoose(index){
-	currentIteration++;
-	for(i=0;i<currentChoices.length;i++){
-		if(i==index){
-			currentChoices[i].choosed=true;
-		}else{
-			currentChoices[i].choosed=false;
-		}
-		
-		//Send choice
-		$.ajax ({
-	        type: "POST",
-	        url: '/persons/choice',
-	        contentType: 'application/json',
-	        async: false,
-	        data: JSON.stringify(currentChoices[i]),
-	        success: function () {
-	        	//alert("He aprendido algo mas de ti!"); 
-	        },error:function(){
-	        	alert('something wrong!!');
-	        }
-	    });
-		
-		
-		
-	}
-	if(currentIteration==8){
-		showPrediction();
-	}else{
-		fetchSamples();	
-	}
-	
-}
-
-
-
-function prototypeForm(){
-	$.get("/persons/prototype",	function(data){
-								var html = buildFormFromPrototype(data);
-								$('#prototypeForm').html(html);
-						}
-	);
-	
-}
-
-function showPrediction(){
-	$.get("/persons/prediction",function(data){
-									currentChoices = data;
-									printChoices();
-									alert('de los 3 personajes, voy a adivinar con cual te quedarias...');
-									setTimeout(function() {
-										for(i=0;i<currentChoices.length;i++){
-											var nameEle = format(currentChoices[i].name);
-											if(currentChoices[i].choosed == false){
-												$('#img_'+nameEle).css('opacity', '0.2');
-												$('#img_'+nameEle).css('filter', 'alpha(opacity=50)');
-											}
-										}
-									}, 3000);
-								}
-	);
-	
-}
-
-
 </script>
-</head>
-<body>
-<div id="Explanation">
-	<h1>Explicacion</h1>
-	Te voy a ir mostrando personajes de 3 en 3.<br> 
-	Elige según el criterio que mas te guste (pero no vayas a pillar, perraco).<br>
-	
-	Si ninguno cumple tu criterio dale al <b>NEXT</b>.
-	
-	
-	 
-</div>
-------------------------------------------------------------------------
-<div id="samples">
 
-</div>
-<!-- 
-<button type="button" onclick="javascript:showPrediction();">Predice NOW!</button>
- -->
-</body>
-</html>
+<article>
+    <h1>Bienvenido a Poder Mental</h1>
+    <div>
+        <p>Te voy a leer la mente y predecir lo que estas pensando! </p>
+        <p>&mdash; Cuando estes preparado , pulsa <a href="javascript:play();">aqui</a></p>
+        <p>&mdash; El Gran Danini.</p>
+    </div>
+</article>
