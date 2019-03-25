@@ -31,7 +31,7 @@ man,blonde,true,sport,false
 woman,brown,true,sport,false
 man,brown,true,actor,true
 man,brown,false,sport,true
-man,brown,false,sport,true
+man,brown,false,sport,false
 woman,brown,false,sport,false
 %
 %Hay mujeres rubias,(lo demas aleatorio) por lo tanto todo true

@@ -6,6 +6,7 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript">
+
 var currentChoices;
 $( document ).ready(function() {
     fetchSamples();
@@ -25,22 +26,26 @@ function printChoices(){
 	for(i=0;i<currentChoices.length;i++){
 		html += generateSampleUI(i, currentChoices[i]);
 	}
+	//Add next, skip election
+	html += generateSampleUI(-1, {name:'anyone',imageURL:'http://www.clker.com/cliparts/I/G/g/8/6/W/next-md.png' });
+	
 	$('#samples').html(html);
 }
 
 function generateSampleUI(index, choice){
 	return '<a href="javascript:sendChoose('+index+');">' + 
-				'<img src="'+choice.imageURL+'" alt="'+choice.name+'" width="200" height="200">' +
+				'<img id="img_'+format(choice.name)+'" src="'+choice.imageURL+'" alt="'+choice.name+'" width="200" height="200" >' +
 			'</a>';
 }
 
 function sendChoose(index){
 	for(i=0;i<currentChoices.length;i++){
-		if(i ==index){
+		if(i==index){
 			currentChoices[i].choosed=true;
 		}else{
 			currentChoices[i].choosed=false;
 		}
+		
 		//Send choice
 		$.ajax ({
 	        type: "POST",
@@ -49,11 +54,12 @@ function sendChoose(index){
 	        async: false,
 	        data: JSON.stringify(currentChoices[i]),
 	        success: function () {
-	        	alert("He aprendido algo mas de ti!"); 
+	        	//alert("He aprendido algo mas de ti!"); 
 	        },error:function(){
 	        	alert('something wrong!!');
 	        }
 	    });
+		
 		
 		
 	}
@@ -72,6 +78,24 @@ function prototypeForm(){
 	
 }
 
+function showPrediction(){
+	$.get("/persons/prediction",function(data){
+									currentChoices = data;
+									printChoices();
+									setTimeout(function() {
+										for(i=0;i<currentChoices.length;i++){
+											var nameEle = format(currentChoices[i].name);
+											if(currentChoices[i].choosed == false){
+												$('#img_'+nameEle).css('opacity', '0.2');
+												$('#img_'+nameEle).css('filter', 'alpha(opacity=50)');
+											}
+										}
+									}, 3000);
+								}
+	);
+	
+}
+
 
 </script>
 </head>
@@ -83,6 +107,6 @@ function prototypeForm(){
 <div id="samples">
 
 </div>
-
+<button type="button" onclick="javascript:showPrediction();">Predice NOW!</button>
 </body>
 </html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript">
+var models;
+var currentModelIndex=-1;
+
+$( document ).ready(function() {
+	//print prototype form
+	$.get("/persons/prototype",	function(data){
+									var html = buildFormFromPrototype(data);
+									$('#prototypeForm').html(html);
+									fetchModels();
+							}
+	);
+});
+
+/**
+ * Fetch the available choices
+ */
+function fetchModels(){
+	$.get("/persons/all",	function(data){
+									models = data;
+									showModel('next');
+									showButtons('modelEditButtons');
+								}
+	);
+}
+
+/**
+ * Prints the model on the form
+ */
+function showModel(order){
+	if(order=='next'){
+		currentModelIndex++;
+	}else if(order == 'back'){
+		currentModelIndex--;
+	}
+	
+	for(var key in models[currentModelIndex]){ 
+		$('form[id=buildObjectFromPrototype]').find('input[name='+key+']').val(models[currentModelIndex][key]);
+	}
+	$('#current_modelImage').attr("src",models[currentModelIndex].imageURL);
+}
+
+
+/**
+ * Create a new Model
+ * @returns
+ */
+function createChoice(){
+	var toCreate = buildJsonObjectFromForm();
+	$.ajax ({
+        type: "POST",
+        url: '/persons',
+        contentType: 'application/json',
+        async: false,
+        data: JSON.stringify(toCreate),
+        success: function () {
+        	buildFormFromPrototype({});//show empty form 
+        	showButtons('modelCreateButtons');
+        },error:function(){
+        	alert('something wrong!!');
+        }
+    });
+}
+
+/**
+ * Create a new Model
+ * @returns
+ */
+function updateChoice(){
+	var toUpdate= buildJsonObjectFromForm();
+	$.ajax ({
+        type: "PUT",
+        url: '/persons',
+        contentType: 'application/json',
+        async: false,
+        data: JSON.stringify(toUpdate),
+        success: function (data) {
+        	buildFormFromPrototype();//show empty form 
+        	showButtons('modelEditButtons');
+        },error:function(){
+        	alert('something wrong!!');
+        }
+    });
+}
+/**
+ * Create a new Model
+ * @returns
+ */
+function deleteChoice(){
+	var toDelete= buildJsonObjectFromForm();
+	$.ajax ({
+        type: "DELETE",
+        url: '/persons',
+        contentType: 'application/json',
+        async: false,
+        data: JSON.stringify(toDelete),
+        success: function (data) {
+        	location.reload();
+        },error:function(){
+        	alert('something wrong!!');
+        }
+    });
+}
+
+/**
+ * Manage buttons on screen
+ */
+function showButtons(buttonGroupName){
+	if(buttonGroupName=='modelCreateButtons'){
+		$('#modelEditButtons').hide();
+		$('#modelCreateButtons').show();
+	}else if(buttonGroupName=='modelEditButtons'){
+		$('#modelCreateButtons').hide();
+		$('#modelEditButtons').show();
+	}
+}
+
+
+
+</script>
+
+
+</head>
+<body>
+
+
+<div id="prototypeForm">
+	<!-- The form printed here -->
+	
+</div>
+<div id="imgcontainer">
+<img id="current_modelImage" width="200" height="200" >
+</div>
+
+<div id="buttonsContainer" style="clear:both;">
+
+	<div id="modelCreateButtons" >
+		<div>------------------------------------------------------------------------</div>
+		<button type="button" onclick="createChoice();" >Create</button> <br>
+	</div>
+	
+	<div id="modelEditButtons">
+		<div>------------------------------------------------------------------------</div>
+		<button type="button" onclick="javascript:showModel('back');">Back</button>
+		<button type="button" onclick="javascript:showModel('next');">Next</button>
+		
+		<br>
+		<button type="button" id="updateModelButton" onclick="javascript:updateChoice();" >Update</button> 
+		<button type="button" id="updateModelButton" onclick="javascript:prototypeForm();" >Delete</button> <br>
+		<br>
+		<button type="button" onclick="showButtons('');" >Create NEW!!</button> <br>
+	</div>
+</div>
+<br>
+
+
+</body>
+</html>

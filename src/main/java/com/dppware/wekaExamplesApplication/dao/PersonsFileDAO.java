@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.dppware.wekaExamplesApplication.bean.Person;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -56,14 +57,40 @@ public class PersonsFileDAO {
 		}	
 	    
 	}
-	
-	public void save(Person person) throws IOException {
+	/**
+	 * Save or update
+	 * @param person
+	 * @return
+	 * @throws IOException
+	 */
+	public Person saveOrUpdate(Person person) throws IOException {
+		if(inMemoryStore.contains(person)) {
+			inMemoryStore.remove(person);
+		}
 		inMemoryStore.add(person);
+		persist();
+	    return person;
+	}
+	
+	public Person delete(Person person) throws IOException {
+		if(inMemoryStore.contains(person)) {
+			inMemoryStore.remove(person);
+		}
+		persist();
+		return person;
+	}
+	
+	/**
+	 * Persist file info
+	 * @throws IOException
+	 */
+	private void persist() throws IOException {
 		Path path = Paths.get(filePath);
 	    String str = mapper.writeValueAsString(inMemoryStore);
 	    byte[] strToBytes = str.getBytes();
 	    Files.write(path, strToBytes);
 	}
+	
 	/**
 	 * Return a random sublist
 	 * @param size

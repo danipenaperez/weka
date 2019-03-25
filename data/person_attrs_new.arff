@@ -1,0 +1,10 @@
+@relation likePerson
+
+@attribute genre {man,woman}
+@attribute hairColour {blonde,red,brown,nohair}
+@attribute isSpanish {false,true}
+@attribute profession {actor,sport,tv,politician,programmer}
+@attribute class {false,true,quizas}
+
+@data
+

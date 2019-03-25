@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,15 +17,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dppware.wekaExamplesApplication.bean.Person;
 import com.dppware.wekaExamplesApplication.dao.PersonsFileDAO;
+import com.dppware.wekaExamplesApplication.service.PredicctionService;
 
 @RestController
 public class PersonsController {
 
 	@Autowired
+	private PredicctionService predicctionService;
+	
+	@Autowired
 	private PersonsFileDAO personsDAO;
 	
 	private List<Person> alreadyShown = new ArrayList<Person>();
 	
+	
+	@RequestMapping(value = "/persons/all", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Person> getAllPersons() {
+		List<Person> choices =personsDAO.getAll();
+		
+		return choices;
+	}
 	
 	@RequestMapping(value = "/persons", method = RequestMethod.GET)
 	@ResponseBody
@@ -40,11 +51,51 @@ public class PersonsController {
 		return choices;
 	}
 	
+	
+	
+	/**
+	 * Return a list of choices, and the selected of them
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/persons/prediction", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Person> getPredictionBasedOnChoices() throws Exception {
+		List<Person> choices = new ArrayList<Person>();
+		Person p;
+		int matchCounter = 0,notMatchCounter=0;
+		while(choices.size()<3) {
+			p = personsDAO.getRandom(1, false, choices).get(0);
+			p.setChoosed(predicctionService.predice(p));
+			if(p.getChoosed()) {
+				if(matchCounter!=1) {
+					choices.add(p);
+					matchCounter++;
+				}
+			}else {
+				if(notMatchCounter!=2) {
+					choices.add(p);
+					notMatchCounter++;
+				}
+			}
+		}
+		return choices;
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "/persons/choice", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public void processChoice(@RequestBody Person person) throws IOException {
+	public void processChoice(@RequestBody Person person)  {
 		System.out.println(person + "acceptada = "+ person.getChoosed());
+		try {
+			predicctionService.learn(person);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@RequestMapping(value = "/persons", method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
@@ -52,9 +103,25 @@ public class PersonsController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createChoice(@RequestBody Person person) throws IOException {
 		System.out.println(person);
-	    personsDAO.save(person);
+	    personsDAO.saveOrUpdate(person);
 	}
 	
+	@RequestMapping(value = "/persons", method = RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Person updateChoice(@RequestBody Person person) throws IOException {
+		System.out.println(person);
+	    Person p = personsDAO.saveOrUpdate(person);
+	    return p;
+	}
+	@RequestMapping(value = "/persons", method = RequestMethod.DELETE, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Person deleteChoice(@RequestBody Person person) throws IOException {
+		System.out.println(person);
+	    Person p = personsDAO.saveOrUpdate(person);
+	    return p;
+	}
 	
 	/**
 	 * Return the ObjectModel prototype

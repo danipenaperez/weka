@@ -1,5 +1,8 @@
 package com.dppware.wekaExamplesApplication;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
@@ -10,6 +13,7 @@ import weka.classifiers.trees.J48;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils.DataSource;
 
 public class WekaPersonsTest {
@@ -29,7 +33,7 @@ public class WekaPersonsTest {
 	public void WekaTestJ48() throws Exception {
 		DataSource source = new DataSource(new ClassPathResource("person_attrs_test.arff").getInputStream());
 		Instances dataSet = source.getDataSet();
-
+		
 		// setting class attribute if the data format does not provide this information
 		// For example, the XRFF format saves the class attribute information as well
 		// establece cual es el class (el target a conseguir) generalmente el ultimo
@@ -97,6 +101,33 @@ public class WekaPersonsTest {
 		System.out.println(result);
 		
 	}
+	
+	
+	@Test
+	public void updateArfffileWithNewRegs() throws Exception {
+		File f = new File("./data/person_attrs_new.arff");
+		DataSource source = new DataSource(new FileInputStream(f));
+		Instances dataSet = source.getDataSet();
+		
+		for(int i=0;i<3;i++) {
+			Person person = new Person("man", "blonde",true, "actor", "http://new.jpg", "Rocito");
+			Instance ins = new DenseInstance(5);
+			ins.setDataset(dataSet);
+			ins.setValue(0, person.getGenre());
+			ins.setValue(1, person.getHairColour());
+			ins.setValue(2, person.getIsSpanish().toString());
+			ins.setValue(3, person.getProfession());
+			ins.setValue(4, "false");	
+			dataSet.add(ins);
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
 	
 //	
 //	@Test

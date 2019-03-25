@@ -1,5 +1,8 @@
 package com.dppware.wekaExamplesApplication.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
@@ -18,17 +21,22 @@ import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
+import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils.DataSource;
 
 @Service
 public class PredicctionService {
 
+	
+	File f = new File("./data/person_attrs_new.arff");
+	
 	private DataSource source;
 	private Instances dataSet;
 	
+	
 	@PostConstruct
 	private void init() throws Exception {
-		this.source = new DataSource(new ClassPathResource("person_attrs.arff").getInputStream());
+		this.source = new DataSource(new FileInputStream(f));
 		this.dataSet = source.getDataSet();
 		// setting class attribute if the data format does not provide this information
 		// For example, the XRFF format saves the class attribute information as well
@@ -38,24 +46,24 @@ public class PredicctionService {
 		}
 	}
 	
-	
+	/**
+	 * Store into current DataSet the option passed
+	 * @param person
+	 * @throws Exception
+	 */
 	public void learn(Person person) throws Exception {
-		
-		// Prepare the filter
-		J48 tree = new J48();
-		tree.setUnpruned(true);
-		tree.buildClassifier(dataSet);
-		
 		//Create instance to Test
-		Instance ins = new DenseInstance(2);
+		Instance ins = new DenseInstance(5);
 		ins.setDataset(dataSet);
 		ins.setValue(0, person.getGenre());
 		ins.setValue(1, person.getHairColour());
-		ins.setValue(1, person.getIsSpanish().toString());
-		ins.setValue(1, person.getProfession());
+		ins.setValue(2, person.getIsSpanish().toString());
+		ins.setValue(3, person.getProfession());
+		ins.setValue(4, person.getChoosed().toString());	
+		dataSet.add(ins);
 		
-		//return ins;
-		
+		//log
+		System.out.println("current learned data " +this.dataSet.size());
 	}
 	
 	/**
@@ -84,8 +92,16 @@ public class PredicctionService {
 	}
 	
 	
-	
-	
+	/**
+	 * Persist current DataSet to file
+	 * @throws IOException
+	 */
+	private void persistCurrentDataSet() throws IOException {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(dataSet);
+		saver.setFile(f);
+		saver.writeBatch();
+	}
 	
 	
 	
