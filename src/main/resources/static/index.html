@@ -6,8 +6,8 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript">
-
 var currentChoices;
+var currentIteration=0;
 $( document ).ready(function() {
     fetchSamples();
 });
@@ -38,7 +38,11 @@ function generateSampleUI(index, choice){
 			'</a>';
 }
 
+/**
+ * Click on Image
+ */
 function sendChoose(index){
+	currentIteration++;
 	for(i=0;i<currentChoices.length;i++){
 		if(i==index){
 			currentChoices[i].choosed=true;
@@ -63,8 +67,12 @@ function sendChoose(index){
 		
 		
 	}
+	if(currentIteration==8){
+		showPrediction();
+	}else{
+		fetchSamples();	
+	}
 	
-	fetchSamples();
 }
 
 
@@ -82,6 +90,7 @@ function showPrediction(){
 	$.get("/persons/prediction",function(data){
 									currentChoices = data;
 									printChoices();
+									alert('de los 3 personajes, voy a adivinar con cual te quedarias...');
 									setTimeout(function() {
 										for(i=0;i<currentChoices.length;i++){
 											var nameEle = format(currentChoices[i].name);
@@ -100,13 +109,22 @@ function showPrediction(){
 </script>
 </head>
 <body>
-<div id="prototypeForm">
-	<button type="button" onclick="javascript:prototypeForm();">printPrototypeform</button>
+<div id="Explanation">
+	<h1>Explicacion</h1>
+	Te voy a ir mostrando personajes de 3 en 3.<br> 
+	Elige según el criterio que mas te guste (pero no vayas a pillar, perraco).<br>
+	
+	Si ninguno cumple tu criterio dale al <b>NEXT</b>.
+	
+	
+	 
 </div>
 ------------------------------------------------------------------------
 <div id="samples">
 
 </div>
+<!-- 
 <button type="button" onclick="javascript:showPrediction();">Predice NOW!</button>
+ -->
 </body>
 </html>
