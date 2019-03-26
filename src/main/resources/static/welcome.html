@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<title>Poder Mental</title>
+<script type="text/javascript">
+function start(){
+	//Send choice
+	$.ajax ({
+        type: "POST",
+        url: '/play',
+        contentType: 'application/json',
+        async: false,
+        data: $('#email').val(),
+        success: function (data) {
+        	alert('session creada '+data);
+        },error:function(){
+        	alert('something wrong!!');
+        }
+    });
+}
+
+</script>
+</head>
+<body>
+
+<input type="email" id="email" placeholder="user@tenant.com"></input>
+<button  onclick="javascript:start();">Start!</button>
+
+</body>
+</html>
