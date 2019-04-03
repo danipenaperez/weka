@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	
+    <title>Hello, world!</title>
+  </head>
+  <body>
+  	<!-- NAVBAR -->
+  	<div id="navBarContainer"></div>
+
+	<div id="navBarContainer2"></div>
+	
+	
+	<!-- Latest compiled and minified CSS -->
+	
+	
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+    <!-- Plugins jquery -->
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    
+    <!-- laurbe -->
+    <script type="text/javascript" src="./laurbe/js/components/laurbe.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/navbar.js"></script>
+    
+    
+    <script type="text/javascript" src="js/ui.js"></script>
+    <script type="text/javascript">
+	    $( document ).ready(function() {
+	        console.log( "ready!" );
+	        var menu = new laurbe.navBar({	renderTo:'navBarContainer', 
+	        								title:'hola',
+	        								prop:'soy el 1',
+	        								items: [
+	        									{
+	        										text: 'Tenant'
+	        									},
+	        									{
+	        										text: 'Prototypes'
+	        									},
+	        									{
+	        										text: 'Models'
+	        									}
+	        								]
+	        });
+	        
+	        menu.init();
+	        menu.render();
+	        console.log(menu);
+	        
+	        var menu2 = new laurbe.navBar({	
+	        	renderTo:'navBarContainer2', 
+							title:'Hellow',
+							items: [
+								
+							]
+			});
+			
+			menu2.init();
+			menu2.render();
+			console.log(menu2);
+	        
+	    });
+    </script> 
+  </body>
+</html>
