@@ -1,0 +1,15 @@
+
+
+<!--Sacado de https://getbootstrap.com/docs/4.0/layout/grid/  -->
+
+<script id="layoutTemplate" type="text/x-custom-template">
+<div class="container">
+  {{if title}}
+  	<h1 class="font-weight-light text-left text-lg-left mt-4 mb-0">${title}</h1>
+  	<hr class="mt-2 mb-5"></hr> 
+  {{/if}}
+  <div class="row" id="${id}_childsWrapper">
+  	<!-- Region items will be render here -->
+  </div>
+</div>
+</script>

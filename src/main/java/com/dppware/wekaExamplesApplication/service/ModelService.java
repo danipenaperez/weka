@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.dppware.wekaExamplesApplication.bean.Model;
 import com.dppware.wekaExamplesApplication.bean.Prototype;
+import com.dppware.wekaExamplesApplication.dao.FilePersistenceDAO;
 
 
 /**
@@ -27,6 +28,9 @@ public class ModelService {
 	
 	@Autowired
 	private PrototypeService prototypeService;
+	
+	@Autowired
+	private FilePersistenceDAO persistence;
 	
 	Random r = new Random();
 	
@@ -63,6 +67,8 @@ public class ModelService {
 		}
 		
 		models.add(model);
+		
+		persistence.persistToFiles();
 		
 		return model;
 	}

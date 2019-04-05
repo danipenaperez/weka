@@ -1,14 +1,19 @@
 package com.dppware.wekaExamplesApplication.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dppware.wekaExamplesApplication.bean.Prototype;
+import com.dppware.wekaExamplesApplication.dao.FilePersistenceDAO;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * Manage all prototype of all Tenant
@@ -24,6 +29,8 @@ public class PrototypeService {
 	
 	private Map<String, Prototype> prototypes = new HashMap<String,Prototype>();
 	
+	@Autowired
+	private FilePersistenceDAO persistence;
 	
 	
 	/**
@@ -63,8 +70,11 @@ public class PrototypeService {
 	 * Return the prototype object created for this tenant
 	 * @param tenantId
 	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
-	public Prototype saveTenantPrototype(String tenantId, Prototype prototypeInfo){
+	public Prototype saveTenantPrototype(String tenantId, Prototype prototypeInfo) throws JsonGenerationException, JsonMappingException, IOException{
 		prototypeInfo.setId(UUID.randomUUID().toString() );
 		prototypes.put(prototypeInfo.getId(), prototypeInfo);
 		//asociate to tenant
@@ -74,6 +84,9 @@ public class PrototypeService {
 			tenantPrototypes.put(tenantId, tenantPrototypeIds);
 		}
 		tenantPrototypeIds.add(prototypeInfo);
+		
+		persistence.persistToFiles();
+		
 		return prototypeInfo;
 	}
 	
@@ -89,6 +102,8 @@ public class PrototypeService {
 			throw new Exception(String.format("PrototypeID %s not exist for this tenant.", prototypeId));
 		}
 		prototypes.put(prototypeId, prototypeInfo);
+		
+		persistence.persistToFiles();
 		
 		return prototypeInfo;
 	}

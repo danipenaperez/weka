@@ -66,11 +66,11 @@ public class PlayController {
      * @param person
      * @throws Exception 
      */
-    @GetMapping(value = "/prototype/{prototypeId}/model", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/prototype/{prototypeId}/model", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<Model> getModels(
-    		@RequestHeader(name = SESSION_ID_HEADER_NAME, required = true) String sessionId,
+    		@RequestHeader(name = SESSION_ID_HEADER_NAME, required = false, defaultValue="nolose") String sessionId,
     		@PathVariable("prototypeId") String prototypeId,
     		@RequestParam(value="mode", defaultValue="random") String mode,
     		@RequestParam(value="size", defaultValue="3") int size) throws Exception {

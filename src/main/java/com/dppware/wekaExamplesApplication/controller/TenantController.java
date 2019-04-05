@@ -103,7 +103,7 @@ public class TenantController {
 	 */
     @GetMapping(value = "{id}/prototype")
     @ResponseBody
-    public List<Prototype> getPrototype(@PathParam("id") String tenantId) {
+    public List<Prototype> getTenantPrototypes(@PathVariable("id") String tenantId) {
         return prototypeService.getTenantPrototypes(tenantId);
     }
     

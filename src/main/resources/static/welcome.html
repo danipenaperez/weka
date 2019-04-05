@@ -1,32 +1,123 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-<title>Poder Mental</title>
-<script type="text/javascript">
-function start(){
-	//Send choice
-	$.ajax ({
-        type: "POST",
-        url: '/play',
-        contentType: 'application/json',
-        async: false,
-        data: $('#email').val(),
-        success: function (data) {
-        	alert('session creada '+data);
-        },error:function(){
-        	alert('something wrong!!');
-        }
-    });
-}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-</script>
-</head>
-<body>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	
+    <title>Welcome to weka</title>
+  </head>
+  <body>
 
-<input type="email" id="email" placeholder="user@tenant.com"></input>
-<button  onclick="javascript:start();">Start!</button>
+  	<div id="header"></div>
+  	<div id="mainContent"></div>
 
-</body>
+	
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+    <!-- Plugins jquery -->
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    
+    <!-- laurbe -->
+    <script type="text/javascript" src="./laurbe/js/components/laurbe.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/layout.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/region.js"></script>
+
+    <script type="text/javascript" src="./laurbe/js/components/navbar.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/navbarMenuItem.js"></script>
+
+    <script type="text/javascript" src="./laurbe/js/components/image.js"></script>
+        <script type="text/javascript" src="./laurbe/js/components/button.js"></script>
+
+    <script type="text/javascript" src="./laurbe/js/components/container.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/form.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/textField.js"></script>
+
+    <script type="text/javascript" src="./laurbe/js/components/grid.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/row.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/column.js"></script>
+
+    <script type="text/javascript" src="./laurbe/js/components/cardGroup.js"></script>
+    <script type="text/javascript" src="./laurbe/js/components/card.js"></script>
+
+    <script type="text/javascript">
+    	$(window).on('load', function() { 
+			
+			var headerMenu = new laurbe.NavBar({	
+							renderTo:'header',
+							title:'Weka'
+							
+			});
+			headerMenu.render();
+			
+			
+			var cardsContainer = new laurbe.Container({
+	    		items: [
+					new laurbe.CardGroup({
+					    		items: [
+									  new laurbe.Card({
+										title:'Card1',
+										text:'Novedades de la herramieta, conectate y sientete conectado',
+										footMessage:'footermeeess',
+										img:{
+											src: 'https://www.paradigmadigital.com/wp-content/themes/paradigma13/images/logos/logo_paradigma_2018_rgb.png',
+											alt: 'mi imagen'
+										},
+										onclick:function(){
+											alert('load game '+ this.id);
+										}
+									}),	
+									new laurbe.Card({
+										title:'Card2',
+										text:'Si quiere convertirte en chef este es tu lugar',
+										footMessage:'footermeeess',
+										img:{
+											src: 'https://www.paradigmadigital.com/wp-content/uploads/2019/03/testKotlin-01.jpg',
+											alt: 'mi imagen'
+										},
+										onclick:function(){
+											alert('load game '+ this.id);
+										}
+									}),
+									new laurbe.Card({
+										title:'Card3',
+										text:'Esta apasionante historia nos narra como Juanito valderrama canto a la luna',
+										footMessage:'footermeeess',
+										img:{
+											src: 'http://toyoutome.es/wp-content/uploads/2016/06/EaaS_04.jpg',
+											alt: 'mi imagen'
+										},
+										onclick:function(){
+											alert('load game '+ this.id);
+										}
+									})
+					    		]
+					  })					
+				]
+	    	});
+
+			var mainContentLayout = new laurbe.Layout({
+	    		renderTo:'mainContent',
+	    		title:'Elige un juego de adivinacion',
+	    		items:[
+	    			cardsContainer
+	    			
+	    		]
+			});
+	        
+			mainContentLayout.render();
+
+		});
+    </script> 
+  </body>
 </html>
+

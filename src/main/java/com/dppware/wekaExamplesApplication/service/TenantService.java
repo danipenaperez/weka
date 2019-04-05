@@ -6,14 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dppware.wekaExamplesApplication.bean.Tenant;
+import com.dppware.wekaExamplesApplication.dao.FilePersistenceDAO;
 
 @Service
 public class TenantService {
 
 	private Map<String,Tenant> tenants = new HashMap<String,Tenant>() ;
+	
+	@Autowired
+	private FilePersistenceDAO persistence;
 	
 	/**
 	 * Create a tenant
@@ -27,6 +32,8 @@ public class TenantService {
 		}
 		tenant.setId(UUID.randomUUID().toString());
 		tenants.put(tenant.getId(), tenant);
+		
+		persistence.persistToFiles();
 		return tenant;
 	}
 	
@@ -38,6 +45,7 @@ public class TenantService {
 	 */
 	public void delete(String tenantId) throws Exception {
 		tenants.remove(tenantId);
+		persistence.persistToFiles();
 	}
 	
 	
